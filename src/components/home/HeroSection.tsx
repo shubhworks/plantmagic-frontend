@@ -28,10 +28,10 @@ export const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.6 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-6"
+              className="text-4xl md:text-5xl text-gray-100 lg:text-6xl font-bold leading-tight mb-6"
             >
               Partners with Nature for a{" "}
-              <span className="text-secondary">Sustainable Future</span>
+              <span className="text-amber-400">Sustainable Future</span>
             </motion.h1>
 
             <motion.p
