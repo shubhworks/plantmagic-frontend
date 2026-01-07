@@ -5,14 +5,14 @@ import { Search, Menu, X, ChevronDown, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const productLinks = [
-  { name: "Plant Health", href: "/products/plant-health", description: "Bio-stimulants for optimal growth" },
-  { name: "Bio-Silicon", href: "/products/bio-silicon", description: "Cellular strength builder" },
-  { name: "Humagic Elixir", href: "/products/humagic-elixir", description: "Humic & Fulvic acid blend" },
-  { name: "Magne-Cal+", href: "/products/magne-cal", description: "Calcium & Magnesium boost" },
-  { name: "Pest Control", href: "/products/pest-control", description: "Natural pest management" },
-  { name: "Disease Control", href: "/products/disease-control", description: "Bio-fungicides & protection" },
-];
+// const productLinks = [
+//   { name: "Plant Health", href: "/products/plant-health", description: "Bio-stimulants for optimal growth" },
+//   { name: "Bio-Silicon", href: "/products/bio-silicon", description: "Cellular strength builder" },
+//   { name: "Humagic Elixir", href: "/products/humagic-elixir", description: "Humic & Fulvic acid blend" },
+//   { name: "Magne-Cal+", href: "/products/magne-cal", description: "Calcium & Magnesium boost" },
+//   { name: "Pest Control", href: "/products/pest-control", description: "Natural pest management" },
+//   { name: "Disease Control", href: "/products/disease-control", description: "Bio-fungicides & protection" },
+// ];
 
 const cropLinks = [
   { name: "Cereals", href: "/crops/cereals", description: "Wheat, Rice, Maize" },
@@ -37,25 +37,25 @@ const MegaMenu = ({ title, links, isOpen }: MegaMenuProps) => (
   <AnimatePresence>
     {isOpen && (
       <motion.div
-        initial={{ opacity: 0, y: 10 }}
+        initial={{ opacity: 0, y: -5 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 10 }}
+        exit={{ opacity: 0, y: -5 }}
         transition={{ duration: 0.2 }}
-        className="absolute top-full left-0 w-screen bg-card border-b border-border shadow-elevated"
+        className="fixed top-20 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-elevated z-40 w-[95vw] max-w-3xl mt-2"
       >
-        <div className="container-wide py-8">
-          <h3 className="text-lg font-semibold text-foreground mb-6">{title}</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div className="py-6 px-6">
+          <h3 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">{title}</h3>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {links.map((link) => (
               <Link
                 key={link.href}
                 to={link.href}
-                className="group p-4 rounded-lg hover:bg-accent transition-colors"
+                className="group p-3 rounded-lg hover:bg-accent transition-colors"
               >
-                <p className="font-medium text-foreground group-hover:text-secondary transition-colors">
+                <p className="font-medium text-sm text-foreground group-hover:text-secondary transition-colors">
                   {link.name}
                 </p>
-                <p className="text-sm text-muted-foreground mt-1">{link.description}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{link.description}</p>
               </Link>
             ))}
           </div>
@@ -99,9 +99,9 @@ export const Header = () => {
                 }`}
               >
                 Products
-                <ChevronDown className="ml-1 h-4 w-4" />
               </Link>
-              <MegaMenu title="Our Products" links={productLinks} isOpen={activeMenu === "products"} />
+
+              {/* <MegaMenu title="Our Products" links={productLinks} isOpen={activeMenu === "products"} /> */}
             </div>
 
             <div
@@ -116,9 +116,8 @@ export const Header = () => {
                 }`}
               >
                 Crops
-                <ChevronDown className="ml-1 h-4 w-4" />
               </Link>
-              <MegaMenu title="Crop Solutions" links={cropLinks} isOpen={activeMenu === "crops"} />
+              {/* <MegaMenu title="Crop Solutions" links={cropLinks} isOpen={activeMenu === "crops"} /> */}
             </div>
 
             <div

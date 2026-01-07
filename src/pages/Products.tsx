@@ -1,77 +1,90 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Shield, Sprout, Droplets, Bug, Leaf, Zap } from "lucide-react";
+import { ArrowRight, Filter } from "lucide-react";
 import { Layout } from "@/components/layout/Layout";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { AnimatedSection } from "@/components/common/AnimatedSection";
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-const categories = [
+const productCategories = [
   {
-    id: "plant-health",
-    name: "Plant Health",
-    description: "Bio-stimulants that strengthen cellular structure and boost natural immunity",
-    icon: Leaf,
-    products: ["Bio-Silicon", "Humagic Elixir", "Magne-Cal+"],
-    href: "/products/plant-health",
-    image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=600&q=80",
+    id: "biostimulents",
+    name: "Biostimulents",
+    products: [
+      { id: "black-magic", name: "Black Magic" },
+      { id: "magic-tonic", name: "Magic Tonic" },
+      { id: "shilajit", name: "Shilajit" },
+      { id: "magic-xl", name: "Magic XL" },
+      { id: "humagic-elixir", name: "Humagic Elixir" },
+      { id: "soil-grow", name: "Soil Grow" },
+      { id: "magic-p", name: "Magic P" },
+      { id: "magic-k", name: "Magic K" },
+      { id: "black-magic-gr", name: "Black Magic GR" },
+      { id: "vegetable-magic", name: "Vegetable Magic" },
+      { id: "black-magic-zyme-granules", name: "Black Magic Zyme Granules" },
+    ],
   },
   {
-    id: "pest-control",
-    name: "Pest Control",
-    description: "Natural solutions for effective pest management without chemical residues",
-    icon: Bug,
-    products: ["Neem Guard", "Bio-Trap", "Pheromone Lures"],
-    href: "/products/pest-control",
-    image: "https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8?w=600&q=80",
+    id: "pgrs",
+    name: "PGR's",
+    products: [
+      { id: "cyto-elixirs", name: "Cyto Elixirs" },
+      { id: "gibbra-elixir", name: "Gibbra Elixir" },
+      { id: "magic-hower", name: "Magic Hower" },
+    ],
   },
   {
-    id: "disease-control",
-    name: "Disease Control",
-    description: "Bio-fungicides and protective solutions for disease prevention",
-    icon: Shield,
-    products: ["Tricho-Shield", "Bacillus Mix", "Copper-Bio"],
-    href: "/products/disease-control",
-    image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=600&q=80",
-  },
-];
-
-const featuredProducts = [
-  {
-    id: "bio-silicon",
-    name: "Bio-Silicon",
-    category: "Plant Health",
-    description: "Concentrated liquid bio-stimulant rich in plant-available Silica",
-    icon: Shield,
-    href: "/products/bio-silicon",
+    id: "biologicals",
+    name: "Biologicals",
+    products: [
+      { id: "white-out", name: "White Out" },
+      { id: "fungal-out", name: "Fungal Out" },
+      { id: "virus-shield", name: "Virus Shield" },
+      { id: "gardian-shield-pro", name: "Gardian Shield Pro" },
+      { id: "bacto-shield-pro", name: "Bacto Shield Pro" },
+      { id: "viro-shield", name: "Viro Shield" },
+    ],
   },
   {
-    id: "humagic-elixir",
-    name: "Humagic Elixir",
-    category: "Soil Health",
-    description: "Premium Humic & Fulvic acid blend for root development",
-    icon: Sprout,
-    href: "/products/humagic-elixir",
+    id: "micronutrients",
+    name: "Micronutrients",
+    products: [
+      { id: "magic-cap", name: "Magic Cap" },
+      { id: "magic-zn", name: "Magic ZN" },
+      { id: "magic-bag", name: "Magic Bag" },
+      { id: "zinc-magic", name: "Zinc Magic" },
+    ],
   },
   {
-    id: "magne-cal",
-    name: "Magne-Cal+",
-    category: "Nutrition",
-    description: "Calcium & Magnesium formula for chlorophyll synthesis",
-    icon: Droplets,
-    href: "/products/magne-cal",
-  },
-  {
-    id: "rhizo-boost",
-    name: "Rhizo-Boost",
-    category: "Root Health",
-    description: "Mycorrhizal inoculant for enhanced nutrient uptake",
-    icon: Zap,
-    href: "/products/rhizo-boost",
+    id: "water-treatments",
+    name: "Water Treatments",
+    products: [
+      { id: "bio-silicone-s220", name: "Bio Silicone S220" },
+      { id: "bio-silicone-s240", name: "Bio Silicone S240" },
+      { id: "bio-better", name: "Bio Better" },
+      { id: "magic-tuner", name: "Magic Tuner" },
+    ],
   },
 ];
 
 const Products = () => {
+  const [activeCategory, setActiveCategory] = useState<string>("all");
+
+  const allProducts = productCategories.flatMap((category) =>
+    category.products.map((product) => ({
+      ...product,
+      categoryId: category.id,
+      categoryName: category.name,
+    }))
+  );
+
+  const filteredProducts =
+    activeCategory === "all"
+      ? allProducts
+      : allProducts.filter((product) => product.categoryId === activeCategory);
+
   return (
     <Layout>
       {/* Hero */}
@@ -92,66 +105,82 @@ const Products = () => {
             className="max-w-3xl"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-primary-foreground mb-6">
-              Our Bio-Solutions
+              Our Products
             </h1>
             <p className="text-xl text-primary-foreground/90">
-              Scientifically formulated biostimulants backed by 15+ years of research 
-              and proven results across Indian agricultural conditions.
+              Explore our complete range of bio-solutions designed for sustainable 
+              agriculture and maximum crop performance.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* Categories */}
+      {/* Category Filter */}
+      <section className="py-8 bg-muted border-b border-border">
+        <div className="container-wide">
+          <div className="flex items-center gap-2 mb-4">
+            <Filter className="h-5 w-5 text-muted-foreground" />
+            <span className="text-sm font-medium text-muted-foreground">Filter by Category:</span>
+          </div>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              variant={activeCategory === "all" ? "default" : "outline"}
+              onClick={() => setActiveCategory("all")}
+              className="rounded-full"
+            >
+              All Products
+            </Button>
+            {productCategories.map((category) => (
+              <Button
+                key={category.id}
+                variant={activeCategory === category.id ? "default" : "outline"}
+                onClick={() => setActiveCategory(category.id)}
+                className="rounded-full"
+              >
+                {category.name}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Products Grid */}
       <section className="section-padding bg-background">
         <div className="container-wide">
-          <AnimatedSection className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Browse by Category
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Find the right solution for your specific agricultural needs
-            </p>
+          <AnimatedSection className="mb-8">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground">
+                {activeCategory === "all"
+                  ? "All Products"
+                  : productCategories.find((c) => c.id === activeCategory)?.name}
+              </h2>
+              <span className="text-muted-foreground">
+                {filteredProducts.length} product{filteredProducts.length !== 1 ? "s" : ""}
+              </span>
+            </div>
           </AnimatedSection>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {categories.map((category, index) => (
-              <AnimatedSection key={category.id} delay={index * 0.1}>
-                <Link to={category.href}>
-                  <motion.div
-                    whileHover={{ y: -5 }}
-                    className="group"
-                  >
-                    <Card className="overflow-hidden border-border h-full">
-                      <div className="relative h-48">
-                        <img
-                          src={category.image}
-                          alt={category.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent" />
-                        <div className="absolute bottom-4 left-4">
-                          <div className="w-12 h-12 rounded-lg bg-secondary flex items-center justify-center">
-                            <category.icon className="h-6 w-6 text-secondary-foreground" />
-                          </div>
-                        </div>
-                      </div>
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {filteredProducts.map((product, index) => (
+              <AnimatedSection key={product.id} delay={index * 0.03}>
+                <Link to={`/products/${product.id}`}>
+                  <motion.div whileHover={{ y: -5 }}>
+                    <Card className="border-border bg-card h-full group hover:shadow-card transition-all hover:border-secondary/50">
                       <CardContent className="p-6">
-                        <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-secondary transition-colors">
-                          {category.name}
+                        <div className="w-16 h-16 rounded-xl bg-secondary/10 flex items-center justify-center mb-4 group-hover:bg-secondary/20 transition-colors">
+                          <span className="text-2xl font-bold text-secondary">
+                            {product.name.charAt(0)}
+                          </span>
+                        </div>
+                        <span className="inline-block px-3 py-1 bg-muted rounded-full text-xs text-muted-foreground mb-2">
+                          {product.categoryName}
+                        </span>
+                        <h3 className="text-lg font-semibold text-foreground group-hover:text-secondary transition-colors">
+                          {product.name}
                         </h3>
-                        <p className="text-muted-foreground text-sm mb-4">
-                          {category.description}
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          {category.products.map((product) => (
-                            <span
-                              key={product}
-                              className="inline-block px-3 py-1 bg-muted rounded-full text-xs text-muted-foreground"
-                            >
-                              {product}
-                            </span>
-                          ))}
+                        <div className="flex items-center mt-4 text-secondary text-sm font-medium">
+                          View Details
+                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                         </div>
                       </CardContent>
                     </Card>
@@ -163,42 +192,45 @@ const Products = () => {
         </div>
       </section>
 
-      {/* All Products Grid */}
+      {/* Categories Overview */}
       <section className="section-padding bg-muted">
         <div className="container-wide">
           <AnimatedSection className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-              Featured Products
+              Product Categories
             </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Browse our specialized categories for targeted agricultural solutions
+            </p>
           </AnimatedSection>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {featuredProducts.map((product, index) => (
-              <AnimatedSection key={product.id} delay={index * 0.05}>
-                <Link to={product.href}>
-                  <motion.div whileHover={{ y: -5 }}>
-                    <Card className="border-border bg-card h-full group hover:shadow-card transition-shadow">
-                      <CardContent className="p-6">
-                        <div className="w-12 h-12 rounded-lg bg-secondary/10 flex items-center justify-center mb-4">
-                          <product.icon className="h-6 w-6 text-secondary" />
-                        </div>
-                        <span className="text-xs text-secondary font-medium">
-                          {product.category}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {productCategories.map((category, index) => (
+              <AnimatedSection key={category.id} delay={index * 0.1}>
+                <motion.div
+                  whileHover={{ y: -5 }}
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setActiveCategory(category.id);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                >
+                  <Card className="border-border bg-card h-full group hover:shadow-card transition-all hover:border-secondary/50">
+                    <CardContent className="p-6 text-center">
+                      <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+                        <span className="text-xl font-bold text-primary">
+                          {category.products.length}
                         </span>
-                        <h3 className="text-lg font-semibold text-foreground mt-1 mb-2 group-hover:text-secondary transition-colors">
-                          {product.name}
-                        </h3>
-                        <p className="text-muted-foreground text-sm">
-                          {product.description}
-                        </p>
-                        <div className="flex items-center mt-4 text-secondary text-sm font-medium">
-                          Learn more
-                          <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                </Link>
+                      </div>
+                      <h3 className="text-lg font-semibold text-foreground group-hover:text-secondary transition-colors mb-2">
+                        {category.name}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        {category.products.length} product{category.products.length !== 1 ? "s" : ""}
+                      </p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
               </AnimatedSection>
             ))}
           </div>
