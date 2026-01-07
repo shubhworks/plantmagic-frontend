@@ -158,14 +158,6 @@ export const Header = () => {
               <Search className="h-5 w-5" />
             </Button>
 
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-foreground hover:text-secondary hover:bg-accent"
-            >
-              <Globe className="h-5 w-5" />
-            </Button>
-
             <Link to="/contact">
               <Button className="hidden md:inline-flex bg-secondary hover:bg-secondary/90 text-secondary-foreground">
                 Contact us
