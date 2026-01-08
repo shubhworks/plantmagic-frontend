@@ -1,232 +1,464 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-// const productLinks = [
-//   { name: "Plant Health", href: "/products/plant-health", description: "Bio-stimulants for optimal growth" },
-//   { name: "Bio-Silicon", href: "/products/bio-silicon", description: "Cellular strength builder" },
-//   { name: "Humagic Elixir", href: "/products/humagic-elixir", description: "Humic & Fulvic acid blend" },
-//   { name: "Magne-Cal+", href: "/products/magne-cal", description: "Calcium & Magnesium boost" },
-//   { name: "Pest Control", href: "/products/pest-control", description: "Natural pest management" },
-//   { name: "Disease Control", href: "/products/disease-control", description: "Bio-fungicides & protection" },
-// ];
-
-const cropLinks = [
-  { name: "Cereals", href: "/crops/cereals", description: "Wheat, Rice, Maize" },
-  { name: "Vegetables", href: "/crops/vegetables", description: "Tomato, Chilli, Onion" },
-  { name: "Fruits", href: "/crops/fruits", description: "Mango, Grape, Pomegranate" },
-  { name: "Cash Crops", href: "/crops/cash-crops", description: "Cotton, Sugarcane, Tobacco" },
+const productCategories = [
+  {
+    title: "Bio-Stimulants",
+    items: [
+      { name: "Root Enhancers", href: "/products/root-enhancers" },
+      { name: "Growth Promoters", href: "/products/growth-promoters" },
+      { name: "Stress Relievers", href: "/products/stress-relievers" },
+    ]
+  },
+  {
+    title: "Crop Protection",
+    items: [
+      { name: "Bio-Fungicides", href: "/products/bio-fungicides" },
+      { name: "Bio-Pesticides", href: "/products/bio-pesticides" },
+      { name: "Natural Solutions", href: "/products/natural-solutions" },
+    ]
+  },
+  {
+    title: "Soil Health",
+    items: [
+      { name: "Soil Conditioners", href: "/products/soil-conditioners" },
+      { name: "Organic Matter", href: "/products/organic-matter" },
+      { name: "Microbial Solutions", href: "/products/microbial-solutions" },
+    ]
+  }
 ];
 
-const knowledgeLinks = [
-  { name: "Guides", href: "/knowledge/guides", description: "Application & dosage guides" },
-  { name: "Success Stories", href: "/knowledge/success-stories", description: "Farmer testimonials" },
-  { name: "Research", href: "/knowledge/research", description: "Scientific publications" },
+const cropCategories = [
+  {
+    title: "Field Crops",
+    items: [
+      { name: "Wheat", href: "/crops/wheat" },
+      { name: "Rice", href: "/crops/rice" },
+      { name: "Maize", href: "/crops/maize" },
+      { name: "Cotton", href: "/crops/cotton" },
+    ]
+  },
+  {
+    title: "Vegetables",
+    items: [
+      { name: "Tomato", href: "/crops/tomato" },
+      { name: "Potato", href: "/crops/potato" },
+      { name: "Onion", href: "/crops/onion" },
+      { name: "Chilli", href: "/crops/chilli" },
+    ]
+  },
+  {
+    title: "Fruits",
+    items: [
+      { name: "Mango", href: "/crops/mango" },
+      { name: "Grapes", href: "/crops/grapes" },
+      { name: "Citrus", href: "/crops/citrus" },
+      { name: "Pomegranate", href: "/crops/pomegranate" },
+    ]
+  }
 ];
-
-interface MegaMenuProps {
-  title: string;
-  links: { name: string; href: string; description: string }[];
-  isOpen: boolean;
-}
-
-const MegaMenu = ({ title, links, isOpen }: MegaMenuProps) => (
-  <AnimatePresence>
-    {isOpen && (
-      <motion.div
-        initial={{ opacity: 0, y: -5 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -5 }}
-        transition={{ duration: 0.2 }}
-        className="fixed top-20 left-1/2 -translate-x-1/2 bg-card border border-border rounded-lg shadow-elevated z-40 w-[95vw] max-w-3xl mt-2"
-      >
-        <div className="py-6 px-6">
-          <h3 className="text-sm font-semibold text-foreground mb-4 uppercase tracking-wide">{title}</h3>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                to={link.href}
-                className="group p-3 rounded-lg hover:bg-accent transition-colors"
-              >
-                <p className="font-medium text-sm text-foreground group-hover:text-secondary transition-colors">
-                  {link.name}
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5">{link.description}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-);
 
 export const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+  const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname.startsWith(path);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 100);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const handleMenuClick = (menu: string) => {
+    setActiveMenu(activeMenu === menu ? null : menu);
+  };
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-md border-b border-border">
-      <div className="container-wide">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-xl">P</span>
-            </div>
-            <span className="font-bold text-xl text-foreground">Plantmagic</span>
-          </Link>
-
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-1">
-            <div
-              className="relative"
-              onMouseEnter={() => setActiveMenu("products")}
-              onMouseLeave={() => setActiveMenu(null)}
-            >
-              <Link
-                to="/products"
-                className={`flex items-center px-4 py-2 text-sm font-medium transition-colors hover:text-secondary ${
-                  isActive("/products") ? "text-secondary" : "text-foreground"
-                }`}
+    <>
+      {/* Logo - Fixed on top left of hero (only when not scrolled) */}
+      <AnimatePresence>
+        {!isScrolled && (
+          <motion.div 
+            initial={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed top-6 left-6 z-50"
+          >
+            <Link to="/" className="flex items-center group">
+              <motion.div 
+                whileHover={{ scale: 1.05 }}
+                className="text-2xl font-bold text-white group-hover:text-secondary transition-all duration-300 drop-shadow-lg"
               >
-                Products
-              </Link>
-
-              {/* <MegaMenu title="Our Products" links={productLinks} isOpen={activeMenu === "products"} /> */}
-            </div>
-
-            <div
-              className="relative"
-              onMouseEnter={() => setActiveMenu("crops")}
-              onMouseLeave={() => setActiveMenu(null)}
-            >
-              <Link
-                to="/crops"
-                className={`flex items-center px-4 py-2 text-sm font-medium transition-colors hover:text-secondary ${
-                  isActive("/crops") ? "text-secondary" : "text-foreground"
-                }`}
-              >
-                Crops
-              </Link>
-              {/* <MegaMenu title="Crop Solutions" links={cropLinks} isOpen={activeMenu === "crops"} /> */}
-            </div>
-
-            <div
-              className="relative"
-              onMouseEnter={() => setActiveMenu("knowledge")}
-              onMouseLeave={() => setActiveMenu(null)}
-            >
-              <Link
-                to="/knowledge"
-                className={`flex items-center px-4 py-2 text-sm font-medium transition-colors hover:text-secondary ${
-                  isActive("/knowledge") ? "text-secondary" : "text-foreground"
-                }`}
-              >
-                Knowledge Hub
-                <ChevronDown className="ml-1 h-4 w-4" />
-              </Link>
-              <MegaMenu title="Knowledge Hub" links={knowledgeLinks} isOpen={activeMenu === "knowledge"} />
-            </div>
-
-            <Link
-              to="/about"
-              className={`px-4 py-2 text-sm font-medium transition-colors hover:text-secondary ${
-                isActive("/about") ? "text-secondary" : "text-foreground"
-              }`}
-            >
-              About Us
+                PlantMagic
+              </motion.div>
             </Link>
-          </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Right side actions */}
-          <div className="flex items-center space-x-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="text-foreground hover:text-secondary hover:bg-accent"
-            >
-              <Search className="h-5 w-5" />
-            </Button>
+      {/* Main Header */}
+      <header className={`fixed top-6 z-40 transition-all duration-500 ${
+        isScrolled 
+          ? 'left-1/2 -translate-x-1/2 w-full max-w-4xl px-4' 
+          : 'right-6 w-auto'
+      }`}>
+        <motion.div
+          initial={{ y: -100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className={`transition-all duration-500 overflow-visible ${
+            isScrolled 
+              ? 'bg-white/95 backdrop-blur-xl border border-gray-200 rounded-full shadow-2xl' 
+              : ''
+          }`}
+        >
+          <div className="flex items-center h-14 px-6">
+            {/* Logo in navbar (only when scrolled) */}
+            <AnimatePresence>
+              {isScrolled && (
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="mr-6"
+                >
+                  <Link to="/" className="flex items-center group">
+                    <motion.div 
+                      whileHover={{ scale: 1.05 }}
+                      className="text-lg font-bold text-primary group-hover:text-secondary transition-all duration-300"
+                    >
+                      PlantMagic
+                    </motion.div>
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-            <Link to="/contact">
-              <Button className="hidden md:inline-flex bg-secondary hover:bg-secondary/90 text-secondary-foreground">
-                Contact us
-              </Button>
-            </Link>
-
-            <Button
-              variant="ghost"
-              size="icon"
-              className="lg:hidden text-foreground"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </Button>
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        <AnimatePresence>
-          {isSearchOpen && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="overflow-hidden pb-4"
-            >
-              <div className="relative max-w-xl mx-auto">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                <Input
-                  placeholder="Search for products, crops, pests..."
-                  className="pl-12 h-12 bg-muted border-0 focus-visible:ring-secondary"
-                />
+            {/* Desktop Navigation */}
+            <nav className="hidden lg:flex items-center space-x-6">
+              {/* Products Dropdown */}
+              <div className="relative">
+                <motion.button
+                  whileHover={{ y: -2 }}
+                  onClick={() => handleMenuClick("products")}
+                  className={`flex items-center text-sm font-medium py-2 px-3 rounded-full transition-all duration-300 ${
+                    isActive("/products") 
+                      ? "text-secondary bg-secondary/10" 
+                      : isScrolled 
+                        ? "text-gray-700 hover:text-secondary hover:bg-gray-100" 
+                        : "text-white/90 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  Products
+                  <motion.div
+                    animate={{ rotate: activeMenu === "products" ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown className="ml-1 h-3 w-3" />
+                  </motion.div>
+                </motion.button>
+                
+                {/* Products Mega Menu */}
+                <AnimatePresence>
+                  {activeMenu === "products" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
+                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[500px] ${
+                        isScrolled ? 'bg-white border-gray-200' : 'bg-primary/30 border-primary/40'
+                      } backdrop-blur-xl border rounded-2xl shadow-2xl z-50`}
+                    >
+                      <div className="p-6">
+                        <div className="grid grid-cols-3 gap-4">
+                          {productCategories.map((category, index) => (
+                            <div key={index}>
+                              <h3 className={`font-semibold ${
+                                isScrolled ? 'text-gray-900' : 'text-white'
+                              } mb-3 text-xs uppercase tracking-wide`}>
+                                {category.title}
+                              </h3>
+                              <ul className="space-y-1">
+                                {category.items.map((item) => (
+                                  <li key={item.href}>
+                                    <Link
+                                      to={item.href}
+                                      onClick={() => setActiveMenu(null)}
+                                      className={`text-xs ${
+                                        isScrolled 
+                                          ? 'text-gray-600 hover:text-secondary hover:bg-gray-100' 
+                                          : 'text-white/80 hover:text-white hover:bg-white/10'
+                                      } transition-all duration-200 block py-1 px-2 rounded-lg`}
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+
+              {/* Crops Dropdown */}
+              <div className="relative">
+                <motion.button
+                  whileHover={{ y: -2 }}
+                  onClick={() => handleMenuClick("crops")}
+                  className={`flex items-center text-sm font-medium py-2 px-3 rounded-full transition-all duration-300 ${
+                    isActive("/crops") 
+                      ? "text-secondary bg-secondary/10" 
+                      : isScrolled 
+                        ? "text-gray-700 hover:text-secondary hover:bg-gray-100" 
+                        : "text-white/90 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  Crops
+                  <motion.div
+                    animate={{ rotate: activeMenu === "crops" ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown className="ml-1 h-3 w-3" />
+                  </motion.div>
+                </motion.button>
+                
+                {/* Crops Mega Menu */}
+                <AnimatePresence>
+                  {activeMenu === "crops" && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.3 }}
+                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[500px] ${
+                        isScrolled ? 'bg-white border-gray-200' : 'bg-primary/30 border-primary/40'
+                      } backdrop-blur-xl border rounded-2xl shadow-2xl z-50`}
+                    >
+                      <div className="p-6">
+                        <div className="grid grid-cols-3 gap-4">
+                          {cropCategories.map((category, index) => (
+                            <div key={index}>
+                              <h3 className={`font-semibold ${
+                                isScrolled ? 'text-gray-900' : 'text-white'
+                              } mb-3 text-xs uppercase tracking-wide`}>
+                                {category.title}
+                              </h3>
+                              <ul className="space-y-1">
+                                {category.items.map((item) => (
+                                  <li key={item.href}>
+                                    <Link
+                                      to={item.href}
+                                      onClick={() => setActiveMenu(null)}
+                                      className={`text-xs ${
+                                        isScrolled 
+                                          ? 'text-gray-600 hover:text-secondary hover:bg-gray-100' 
+                                          : 'text-white/80 hover:text-white hover:bg-white/10'
+                                      } transition-all duration-200 block py-1 px-2 rounded-lg`}
+                                    >
+                                      {item.name}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              {/* Other Navigation Links */}
+              <motion.div whileHover={{ y: -2 }}>
+                <Link
+                  to="/knowledge"
+                  className={`text-sm font-medium py-2 px-3 rounded-full transition-all duration-300 ${
+                    isActive("/knowledge") 
+                      ? "text-secondary bg-secondary/10" 
+                      : isScrolled 
+                        ? "text-gray-700 hover:text-secondary hover:bg-gray-100" 
+                        : "text-white/90 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  Knowledge
+                </Link>
+              </motion.div>
+
+              <motion.div whileHover={{ y: -2 }}>
+                <Link
+                  to="/about"
+                  className={`text-sm font-medium py-2 px-3 rounded-full transition-all duration-300 ${
+                    isActive("/about") 
+                      ? "text-secondary bg-secondary/10" 
+                      : isScrolled 
+                        ? "text-gray-700 hover:text-secondary hover:bg-gray-100" 
+                        : "text-white/90 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  About
+                </Link>
+              </motion.div>
+
+              <motion.div whileHover={{ y: -2 }}>
+                <Link
+                  to="/contact"
+                  className={`text-sm font-medium py-2 px-3 rounded-full transition-all duration-300 ${
+                    isActive("/contact") 
+                      ? "text-secondary bg-secondary/10" 
+                      : isScrolled 
+                        ? "text-gray-700 hover:text-secondary hover:bg-gray-100" 
+                        : "text-white/90 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  Contact
+                </Link>
+              </motion.div>
+            </nav>
+
+            {/* Right Actions */}
+            <div className="flex items-center space-x-2 ml-6">
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsSearchOpen(!isSearchOpen)}
+                  className={`${
+                    isScrolled 
+                      ? 'text-gray-600 hover:text-secondary hover:bg-gray-100' 
+                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                  } rounded-full transition-all duration-300 h-8 w-8`}
+                >
+                  <Search className="h-4 w-4" />
+                </Button>
+              </motion.div>
+
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={`lg:hidden ${
+                    isScrolled 
+                      ? 'text-gray-600 hover:text-secondary hover:bg-gray-100' 
+                      : 'text-white/80 hover:text-white hover:bg-white/10'
+                  } rounded-full transition-all duration-300 h-8 w-8`}
+                  onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                >
+                  {isMobileMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+                </Button>
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Search Bar */}
+          <AnimatePresence>
+            {isSearchOpen && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className={`overflow-hidden border-t ${
+                  isScrolled ? 'border-gray-200 bg-gray-50' : 'border-primary/30 bg-primary/20'
+                } backdrop-blur-sm`}
+              >
+                <div className="py-3 px-6">
+                  <div className="relative">
+                    <Search className={`absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 ${
+                      isScrolled ? 'text-gray-400' : 'text-white/60'
+                    }`} />
+                    <Input
+                      placeholder="Search products, crops..."
+                      className={`pl-10 h-10 ${
+                        isScrolled 
+                          ? 'bg-white border-gray-300 text-gray-900 placeholder:text-gray-500 focus:border-secondary' 
+                          : 'bg-primary/20 border-primary/40 text-white placeholder:text-white/70 focus:border-secondary'
+                      } focus:ring-secondary/50 rounded-full text-sm`}
+                    />
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </motion.div>
+      </header>
 
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-card border-t border-border overflow-hidden"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="lg:hidden fixed top-20 left-1/2 -translate-x-1/2 w-[90%] max-w-sm bg-primary/30 backdrop-blur-xl border border-primary/40 rounded-2xl shadow-2xl overflow-hidden z-50"
           >
-            <nav className="container-wide py-6 space-y-4">
-              <Link to="/products" className="block py-2 text-foreground font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+            <nav className="p-4 space-y-1">
+              <Link
+                to="/products"
+                className="block py-2 px-3 text-white/90 font-medium hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 text-sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
                 Products
               </Link>
-              <Link to="/crops" className="block py-2 text-foreground font-medium" onClick={() => setIsMobileMenuOpen(false)}>
+              <Link
+                to="/crops"
+                className="block py-2 px-3 text-white/90 font-medium hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 text-sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
                 Crops
               </Link>
-              <Link to="/knowledge" className="block py-2 text-foreground font-medium" onClick={() => setIsMobileMenuOpen(false)}>
-                Knowledge Hub
+              <Link
+                to="/knowledge"
+                className="block py-2 px-3 text-white/90 font-medium hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 text-sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Knowledge
               </Link>
-              <Link to="/about" className="block py-2 text-foreground font-medium" onClick={() => setIsMobileMenuOpen(false)}>
-                About Us
+              <Link
+                to="/about"
+                className="block py-2 px-3 text-white/90 font-medium hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 text-sm"
+              >
+                About
               </Link>
-              <Link to="/contact" onClick={() => setIsMobileMenuOpen(false)}>
-                <Button className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground">
-                  Contact us
-                </Button>
+              <Link
+                to="/contact"
+                className="block py-2 px-3 text-white/90 font-medium hover:text-white hover:bg-white/10 rounded-xl transition-all duration-300 text-sm"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contact
               </Link>
             </nav>
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+
+      {/* Click outside to close menus */}
+      {(activeMenu || isMobileMenuOpen) && (
+        <div 
+          className="fixed inset-0 z-30" 
+          onClick={() => {
+            setActiveMenu(null);
+            setIsMobileMenuOpen(false);
+          }}
+        />
+      )}
+    </>
   );
 };
