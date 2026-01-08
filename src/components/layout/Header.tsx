@@ -4,63 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Search, Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-const productCategories = [
-  {
-    title: "Bio-Stimulants",
-    items: [
-      { name: "Root Enhancers", href: "/products/root-enhancers" },
-      { name: "Growth Promoters", href: "/products/growth-promoters" },
-      { name: "Stress Relievers", href: "/products/stress-relievers" },
-    ]
-  },
-  {
-    title: "Crop Protection",
-    items: [
-      { name: "Bio-Fungicides", href: "/products/bio-fungicides" },
-      { name: "Bio-Pesticides", href: "/products/bio-pesticides" },
-      { name: "Natural Solutions", href: "/products/natural-solutions" },
-    ]
-  },
-  {
-    title: "Soil Health",
-    items: [
-      { name: "Soil Conditioners", href: "/products/soil-conditioners" },
-      { name: "Organic Matter", href: "/products/organic-matter" },
-      { name: "Microbial Solutions", href: "/products/microbial-solutions" },
-    ]
-  }
-];
-
-const cropCategories = [
-  {
-    title: "Field Crops",
-    items: [
-      { name: "Wheat", href: "/crops/wheat" },
-      { name: "Rice", href: "/crops/rice" },
-      { name: "Maize", href: "/crops/maize" },
-      { name: "Cotton", href: "/crops/cotton" },
-    ]
-  },
-  {
-    title: "Vegetables",
-    items: [
-      { name: "Tomato", href: "/crops/tomato" },
-      { name: "Potato", href: "/crops/potato" },
-      { name: "Onion", href: "/crops/onion" },
-      { name: "Chilli", href: "/crops/chilli" },
-    ]
-  },
-  {
-    title: "Fruits",
-    items: [
-      { name: "Mango", href: "/crops/mango" },
-      { name: "Grapes", href: "/crops/grapes" },
-      { name: "Citrus", href: "/crops/citrus" },
-      { name: "Pomegranate", href: "/crops/pomegranate" },
-    ]
-  }
-];
+import { productCategories, cropCategories } from "@/lib/data";
 
 export const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -79,9 +23,6 @@ export const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleMenuClick = (menu: string) => {
-    setActiveMenu(activeMenu === menu ? null : menu);
-  };
 
   return (
     <>
@@ -147,28 +88,34 @@ export const Header = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-6">
-              {/* Products Dropdown */}
-              <div className="relative">
-                <motion.button
-                  whileHover={{ y: -2 }}
-                  onClick={() => handleMenuClick("products")}
-                  className={`flex items-center text-sm font-medium py-2 px-3 rounded-full transition-all duration-300 ${
-                    isActive("/products") 
-                      ? "text-secondary bg-secondary/10" 
-                      : isScrolled 
-                        ? "text-gray-700 hover:text-secondary hover:bg-gray-100" 
+              {/* Products Dropdown (hover to open) */}
+              <div
+                className="relative"
+                onMouseEnter={() => setActiveMenu("products")}
+                onMouseLeave={() => setActiveMenu(null)}
+              >
+                <motion.div whileHover={{ y: -2 }}>
+                  <Link
+                    to="/products"
+                    onFocus={() => setActiveMenu("products")}
+                    className={`flex items-center text-sm font-medium py-2 px-3 rounded-full transition-all duration-300 ${
+                      isActive("/products")
+                        ? "text-secondary bg-secondary/10"
+                        : isScrolled
+                        ? "text-gray-700 hover:text-secondary hover:bg-gray-100"
                         : "text-white/90 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  Products
-                  <motion.div
-                    animate={{ rotate: activeMenu === "products" ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
+                    }`}
                   >
-                    <ChevronDown className="ml-1 h-3 w-3" />
-                  </motion.div>
-                </motion.button>
-                
+                    Products
+                    <motion.div
+                      animate={{ rotate: activeMenu === "products" ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ChevronDown className="ml-1 h-3 w-3" />
+                    </motion.div>
+                  </Link>
+                </motion.div>
+
                 {/* Products Mega Menu */}
                 <AnimatePresence>
                   {activeMenu === "products" && (
@@ -176,33 +123,33 @@ export const Header = () => {
                       initial={{ opacity: 0, y: -10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      transition={{ duration: 0.3 }}
-                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[500px] ${
+                      transition={{ duration: 0.2 }}
+                      className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[600px] ${
                         isScrolled ? 'bg-white border-gray-200' : 'bg-primary/30 border-primary/40'
                       } backdrop-blur-xl border rounded-2xl shadow-2xl z-50`}
                     >
                       <div className="p-6">
                         <div className="grid grid-cols-3 gap-4">
-                          {productCategories.map((category, index) => (
-                            <div key={index}>
+                          {productCategories.map((category) => (
+                            <div key={category.id}>
                               <h3 className={`font-semibold ${
                                 isScrolled ? 'text-gray-900' : 'text-white'
                               } mb-3 text-xs uppercase tracking-wide`}>
-                                {category.title}
+                                {category.name}
                               </h3>
                               <ul className="space-y-1">
-                                {category.items.map((item) => (
-                                  <li key={item.href}>
+                                {category.products.map((p) => (
+                                  <li key={p.id}>
                                     <Link
-                                      to={item.href}
+                                      to={`/products/${p.id}`}
                                       onClick={() => setActiveMenu(null)}
                                       className={`text-xs ${
-                                        isScrolled 
-                                          ? 'text-gray-600 hover:text-secondary hover:bg-gray-100' 
+                                        isScrolled
+                                          ? 'text-gray-600 hover:text-secondary hover:bg-gray-100'
                                           : 'text-white/80 hover:text-white hover:bg-white/10'
                                       } transition-all duration-200 block py-1 px-2 rounded-lg`}
                                     >
-                                      {item.name}
+                                      {p.name}
                                     </Link>
                                   </li>
                                 ))}
@@ -216,28 +163,34 @@ export const Header = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Crops Dropdown */}
-              <div className="relative">
-                <motion.button
-                  whileHover={{ y: -2 }}
-                  onClick={() => handleMenuClick("crops")}
-                  className={`flex items-center text-sm font-medium py-2 px-3 rounded-full transition-all duration-300 ${
-                    isActive("/crops") 
-                      ? "text-secondary bg-secondary/10" 
-                      : isScrolled 
-                        ? "text-gray-700 hover:text-secondary hover:bg-gray-100" 
+              {/* Crops Dropdown (hover to open) */}
+              <div
+                className="relative"
+                onMouseEnter={() => setActiveMenu("crops")}
+                onMouseLeave={() => setActiveMenu(null)}
+              >
+                <motion.div whileHover={{ y: -2 }}>
+                  <Link
+                    to="/crops"
+                    onFocus={() => setActiveMenu("crops")}
+                    className={`flex items-center text-sm font-medium py-2 px-3 rounded-full transition-all duration-300 ${
+                      isActive("/crops")
+                        ? "text-secondary bg-secondary/10"
+                        : isScrolled
+                        ? "text-gray-700 hover:text-secondary hover:bg-gray-100"
                         : "text-white/90 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  Crops
-                  <motion.div
-                    animate={{ rotate: activeMenu === "crops" ? 180 : 0 }}
-                    transition={{ duration: 0.3 }}
+                    }`}
                   >
-                    <ChevronDown className="ml-1 h-3 w-3" />
-                  </motion.div>
-                </motion.button>
-                
+                    Crops
+                    <motion.div
+                      animate={{ rotate: activeMenu === "crops" ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ChevronDown className="ml-1 h-3 w-3" />
+                    </motion.div>
+                  </Link>
+                </motion.div>
+
                 {/* Crops Mega Menu */}
                 <AnimatePresence>
                   {activeMenu === "crops" && (
@@ -245,36 +198,34 @@ export const Header = () => {
                       initial={{ opacity: 0, y: -10, scale: 0.95 }}
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                      transition={{ duration: 0.3 }}
+                      transition={{ duration: 0.2 }}
                       className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[500px] ${
                         isScrolled ? 'bg-white border-gray-200' : 'bg-primary/30 border-primary/40'
                       } backdrop-blur-xl border rounded-2xl shadow-2xl z-50`}
                     >
                       <div className="p-6">
                         <div className="grid grid-cols-3 gap-4">
-                          {cropCategories.map((category, index) => (
-                            <div key={index}>
+                          {cropCategories.map((category) => (
+                            <div key={category.id}>
                               <h3 className={`font-semibold ${
                                 isScrolled ? 'text-gray-900' : 'text-white'
                               } mb-3 text-xs uppercase tracking-wide`}>
-                                {category.title}
+                                {category.name}
                               </h3>
                               <ul className="space-y-1">
-                                {category.items.map((item) => (
-                                  <li key={item.href}>
-                                    <Link
-                                      to={item.href}
-                                      onClick={() => setActiveMenu(null)}
-                                      className={`text-xs ${
-                                        isScrolled 
-                                          ? 'text-gray-600 hover:text-secondary hover:bg-gray-100' 
-                                          : 'text-white/80 hover:text-white hover:bg-white/10'
-                                      } transition-all duration-200 block py-1 px-2 rounded-lg`}
-                                    >
-                                      {item.name}
-                                    </Link>
-                                  </li>
-                                ))}
+                                <li>
+                                  <Link
+                                    to={category.href}
+                                    onClick={() => setActiveMenu(null)}
+                                    className={`text-xs ${
+                                      isScrolled
+                                        ? 'text-gray-600 hover:text-secondary hover:bg-gray-100'
+                                        : 'text-white/80 hover:text-white hover:bg-white/10'
+                                    } transition-all duration-200 block py-1 px-2 rounded-lg`}
+                                  >
+                                    {category.name}
+                                  </Link>
+                                </li>
                               </ul>
                             </div>
                           ))}

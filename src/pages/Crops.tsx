@@ -5,41 +5,7 @@ import { Layout } from "@/components/layout/Layout";
 import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { AnimatedSection } from "@/components/common/AnimatedSection";
 import { Card, CardContent } from "@/components/ui/card";
-
-const cropCategories = [
-  {
-    id: "cereals",
-    name: "Cereals",
-    description: "Complete nutrition programs for wheat, rice, maize, barley, and other cereal crops",
-    crops: ["Wheat", "Rice", "Maize", "Barley", "Sorghum", "Millets"],
-    image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=800&q=80",
-    href: "/crops/cereals",
-  },
-  {
-    id: "vegetables",
-    name: "Vegetables",
-    description: "Stage-wise solutions for high-value vegetable cultivation",
-    crops: ["Tomato", "Chilli", "Onion", "Potato", "Brinjal", "Okra"],
-    image: "https://images.unsplash.com/photo-1566385101042-1a0aa0c1268c?w=800&q=80",
-    href: "/crops/vegetables",
-  },
-  {
-    id: "fruits",
-    name: "Fruits",
-    description: "Specialized programs for orchard and vine fruits",
-    crops: ["Mango", "Grape", "Pomegranate", "Banana", "Citrus", "Papaya"],
-    image: "https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=800&q=80",
-    href: "/crops/fruits",
-  },
-  {
-    id: "cash-crops",
-    name: "Cash Crops",
-    description: "Premium solutions for high-revenue commercial crops",
-    crops: ["Cotton", "Sugarcane", "Tobacco", "Tea", "Coffee", "Rubber"],
-    image: "https://images.unsplash.com/photo-1599488615731-7e5c2823ff28?w=800&q=80",
-    href: "/crops/cash-crops",
-  },
-];
+import { cropCategories } from "@/lib/data";
 
 const Crops = () => {
   return (

@@ -7,67 +7,7 @@ import { Breadcrumbs } from "@/components/common/Breadcrumbs";
 import { AnimatedSection } from "@/components/common/AnimatedSection";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-
-const productCategories = [
-  {
-    id: "biostimulents",
-    name: "Biostimulents",
-    products: [
-      { id: "black-magic", name: "Black Magic" },
-      { id: "magic-tonic", name: "Magic Tonic" },
-      { id: "shilajit", name: "Shilajit" },
-      { id: "magic-xl", name: "Magic XL" },
-      { id: "humagic-elixir", name: "Humagic Elixir" },
-      { id: "soil-grow", name: "Soil Grow" },
-      { id: "magic-p", name: "Magic P" },
-      { id: "magic-k", name: "Magic K" },
-      { id: "black-magic-gr", name: "Black Magic GR" },
-      { id: "vegetable-magic", name: "Vegetable Magic" },
-      { id: "black-magic-zyme-granules", name: "Black Magic Zyme Granules" },
-    ],
-  },
-  {
-    id: "pgrs",
-    name: "PGR's",
-    products: [
-      { id: "cyto-elixirs", name: "Cyto Elixirs" },
-      { id: "gibbra-elixir", name: "Gibbra Elixir" },
-      { id: "magic-hower", name: "Magic Hower" },
-    ],
-  },
-  {
-    id: "biologicals",
-    name: "Biologicals",
-    products: [
-      { id: "white-out", name: "White Out" },
-      { id: "fungal-out", name: "Fungal Out" },
-      { id: "virus-shield", name: "Virus Shield" },
-      { id: "gardian-shield-pro", name: "Gardian Shield Pro" },
-      { id: "bacto-shield-pro", name: "Bacto Shield Pro" },
-      { id: "viro-shield", name: "Viro Shield" },
-    ],
-  },
-  {
-    id: "micronutrients",
-    name: "Micronutrients",
-    products: [
-      { id: "magic-cap", name: "Magic Cap" },
-      { id: "magic-zn", name: "Magic ZN" },
-      { id: "magic-bag", name: "Magic Bag" },
-      { id: "zinc-magic", name: "Zinc Magic" },
-    ],
-  },
-  {
-    id: "water-treatments",
-    name: "Water Treatments",
-    products: [
-      { id: "bio-silicone-s220", name: "Bio Silicone S220" },
-      { id: "bio-silicone-s240", name: "Bio Silicone S240" },
-      { id: "bio-better", name: "Bio Better" },
-      { id: "magic-tuner", name: "Magic Tuner" },
-    ],
-  },
-];
+import { productCategories } from "@/lib/data";
 
 const Products = () => {
   const [activeCategory, setActiveCategory] = useState<string>("all");
