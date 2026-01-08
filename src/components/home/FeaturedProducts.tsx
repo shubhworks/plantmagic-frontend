@@ -7,13 +7,13 @@ import { AnimatedSection } from "@/components/common/AnimatedSection";
 
 const products = [
   {
-    id: "bio-silicon",
-    name: "Bio-Silicon",
+    id: "bio-silicone-s220",
+    name: "Bio Silicone S220",
     category: "Plant Health",
     description: "Concentrated liquid bio-stimulant rich in plant-available Silica. Builds cellular mechanical barriers.",
     icon: Shield,
     image: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=400&q=80",
-    href: "/products/bio-silicon",
+    href: "/products/bio-silicone-s220",
   },
   {
     id: "humagic-elixir",
@@ -25,13 +25,13 @@ const products = [
     href: "/products/humagic-elixir",
   },
   {
-    id: "magne-cal",
-    name: "Magne-Cal+",
+    id: "magic-xl",
+    name: "Magic XL",
     category: "Nutrition",
-    description: "Calcium & Magnesium formula for chlorophyll synthesis and fruit quality enhancement.",
+    description: "Premium biostimulant formula for enhanced plant growth and maximum yield potential.",
     icon: Droplets,
     image: "https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=400&q=80",
-    href: "/products/magne-cal",
+    href: "/products/magic-xl",
   },
 ];
 
@@ -53,7 +53,9 @@ export const FeaturedProducts = () => {
             <AnimatedSection key={product.id} delay={index * 0.1}>
               <motion.div whileHover={{ y: -5 }} transition={{ duration: 0.2 }}>
                 <Card className="overflow-hidden border-border bg-card h-full group">
-                  <div className="relative h-48 overflow-hidden">
+                  <div onClick={() => {
+                    window.location.href = product.href;
+                  }} className="relative h-48 cursor-pointer overflow-hidden">
                     <img
                       src={product.image}
                       alt={product.name}
@@ -66,7 +68,9 @@ export const FeaturedProducts = () => {
                       </span>
                     </div>
                   </div>
-                  <CardContent className="p-6">
+                  <CardContent onClick={() => {
+                    window.location.href = product.href;
+                  }} className="p-6 cursor-pointer">
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center">
                         <product.icon className="h-5 w-5 text-secondary" />

@@ -77,6 +77,9 @@ export const HeroSection = () => {
               <Button
                 variant="outline"
                 className="bg-transparent border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 rounded-full"
+                onClick={() => {
+                  window.open("/about");
+                }}
               >
                 <Play className="mr-2 h-4 w-4" />
                 Watch Our Story
