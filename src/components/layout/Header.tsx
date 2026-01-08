@@ -99,7 +99,7 @@ export const Header = () => {
                 whileHover={{ scale: 1.05 }}
                 className="text-2xl font-bold text-white group-hover:text-secondary transition-all duration-300 drop-shadow-lg"
               >
-                PlantMagic
+                <img src="/logo.png" alt="PlantMagic Logo" width="200" />
               </motion.div>
             </Link>
           </motion.div>
@@ -138,7 +138,7 @@ export const Header = () => {
                       whileHover={{ scale: 1.05 }}
                       className="text-lg font-bold text-primary group-hover:text-secondary transition-all duration-300"
                     >
-                      PlantMagic
+                      <img src="/logo1.png" alt="PlantMagic Logo" width="120" />
                     </motion.div>
                   </Link>
                 </motion.div>

@@ -55,11 +55,8 @@ export const Footer = () => {
                 className="mb-6"
               >
                 <div className="flex items-center space-x-3 mb-4">
-                  <div className="w-10 h-10 bg-gradient-to-br from-secondary to-amber-400 rounded-xl flex items-center justify-center">
-                    <Leaf className="h-6 w-6 text-white" />
-                  </div>
                   <span className="font-bold text-2xl bg-gradient-to-r from-white to-amber-200 bg-clip-text text-transparent">
-                    PlantMagic
+                    <img src="/logo.png" alt="PlantMagic Logo" width="200" />
                   </span>
                 </div>
                 <p className="text-white/80 text-sm leading-relaxed mb-6">
