@@ -7,12 +7,21 @@ export const HeroSection = () => {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image */}
+      {/* Background Video */}
       <div className="absolute inset-0 z-0">
-        <img
-          src="https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=1920&q=80"
-          alt="Healthy crop roots"
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
           className="w-full h-full object-cover object-center"
-        />
+        >
+          <source
+            src="/videos/heroBg.mp4"
+            type="video/mp4"
+          />
+          Your browser does not support the video tag.
+        </video>
         <div className="absolute inset-0 bg-gradient-to-r from-primary/85 via-primary/60 to-primary/30" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-primary/40" />
       </div>
@@ -47,8 +56,8 @@ export const HeroSection = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className="text-base md:text-lg text-primary-foreground/90 mb-6 max-w-2xl mx-auto leading-relaxed"
             >
-              Empowering Indian agriculture with Bio-Magic biostimulants. 
-              We restore soil vitality and maximize crop resilience through 
+              Empowering Indian agriculture with Bio-Magic biostimulants.
+              We restore soil vitality and maximize crop resilience through
               biological innovation.
             </motion.p>
 
