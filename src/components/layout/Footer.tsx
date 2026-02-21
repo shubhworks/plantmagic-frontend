@@ -173,7 +173,7 @@ export const Footer = () => {
         <div className="container-wide py-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white/60 text-sm">
-              © 2024 PlantMagic. All rights reserved. Made with 💚 for farmers.
+              © 2026 PlantMagic. All rights reserved.
             </p>
             <div className="flex gap-6">
               <Link to="/privacy" className="text-white/60 text-sm hover:text-secondary transition-colors">
@@ -181,9 +181,6 @@ export const Footer = () => {
               </Link>
               <Link to="/terms" className="text-white/60 text-sm hover:text-secondary transition-colors">
                 Terms
-              </Link>
-              <Link to="/sitemap" className="text-white/60 text-sm hover:text-secondary transition-colors">
-                Sitemap
               </Link>
             </div>
           </div>
