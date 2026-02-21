@@ -12,7 +12,7 @@ interface BreadcrumbsProps {
 
 export const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
   return (
-    <nav className="flex items-center space-x-2 text-sm text-muted-foreground py-4">
+    <nav className="flex text-white font-bold items-center space-x-2 text-sm text-muted-foreground py-4">
       <Link to="/" className="hover:text-secondary transition-colors">
         <Home className="h-4 w-4" />
       </Link>
@@ -24,7 +24,7 @@ export const Breadcrumbs = ({ items }: BreadcrumbsProps) => {
               {item.label}
             </Link>
           ) : (
-            <span className="text-foreground font-medium">{item.label}</span>
+            <span className="text-foreground text-white font-bold">{item.label}</span>
           )}
         </div>
       ))}
